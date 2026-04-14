@@ -1,0 +1,11 @@
+# Core
+vanna[sqlite,fastapi]>=2.0.0
+fastapi
+uvicorn[standard]
+plotly
+pandas
+python-dotenv
+
+# LLM Provider — Groq (OpenAI-compatible, free tier)
+# Sign up at https://console.groq.com to get a free API key
+groq
