@@ -42,7 +42,7 @@ SQLite execution → results + optional Plotly chart
 ### 1. Clone and install
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/RajeevRanjany/Clinic-System.git
 cd nl2sql
 pip install -r requirements.txt
 ```
@@ -50,22 +50,21 @@ pip install -r requirements.txt
 ### 2. Configure environment
 
 ```bash
-cp .env.example .env
-# Edit .env and add your GROQ_API_KEY
+cp .env
+
 ```
 
 ### 3. Create the database
 
 ```bash
 python setup_database.py
-# Output: clinic.db + summary line
+
 ```
 
 ### 4. Seed agent memory
 
 ```bash
 python seed_memory.py
-# Seeds 15 Q&A pairs into DemoAgentMemory
 ```
 
 ### 5. Start the API server
@@ -90,14 +89,44 @@ Ask a natural language question about the clinic data.
 **Response:**
 ```json
 {
-  "message": "Found 5 result(s).",
-  "sql_query": "SELECT p.first_name, p.last_name, SUM(i.total_amount) AS total_spending FROM invoices i JOIN patients p ON p.id = i.patient_id GROUP BY p.id ORDER BY total_spending DESC LIMIT 5",
-  "columns": ["first_name", "last_name", "total_spending"],
-  "rows": [["Aarav", "Sharma", 4500.0], ["Priya", "Verma", 3200.0]],
+    "message": "Found 5 result(s).",
+  "sql_query": "SELECT p.first_name, p.last_name, SUM(i.total_amount) AS total_spending FROM patients p JOIN invoices i ON p.id = i.patient_id GROUP BY p.id ORDER BY total_spending DESC LIMIT 5",
+  "columns": [
+    "first_name",
+    "last_name",
+    "total_spending"
+  ],
+  "rows": [
+    [
+      "Rekha",
+      "Das",
+      23937.71
+    ],
+    [
+      "Ramesh",
+      "Rajput",
+      23473.07
+    ],
+    [
+      "Sudha",
+      "Banerjee",
+      21180.16
+    ],
+    [
+      "Asha",
+      "Mishra",
+      20912.34
+    ],
+    [
+      "Savita",
+      "Gupta",
+      20310.88
+    ]
+  ],
   "row_count": 5,
-  "chart": { "data": [...], "layout": {...} },
-  "chart_type": "bar",
-  "cached": false
+  "chart": null,
+  "chart_type": null,
+  "cached": true
 }
 ```
 
@@ -110,12 +139,12 @@ Ask a natural language question about the clinic data.
 ## Example curl commands
 
 ```bash
-# Health check
+# Health matrices
 curl http://localhost:8000/health
 
-# Ask a question
+# Ask QuestionS : 
 curl -X POST http://localhost:8000/chat \
-  -H "Content-Type: application/json" \
+
   -d '{"question": "How many patients do we have?"}'
 
 # Revenue by doctor
